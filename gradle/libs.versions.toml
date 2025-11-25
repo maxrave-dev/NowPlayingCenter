@@ -1,11 +1,8 @@
 [versions]
-androidx-lifecycle = "2.9.5"
-composeHotReload = "1.0.0-rc02"
-composeMultiplatform = "1.9.1"
-junit = "4.13.2"
+library = "0.0.1"
 kotlin = "2.2.20"
-kotlinx-coroutines = "1.10.2"
 ktor_version="3.3.2"
+maven-publish = "0.35.0"
 
 [libraries]
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor_version" }
@@ -13,7 +10,5 @@ ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor_vers
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
-composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
-composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }

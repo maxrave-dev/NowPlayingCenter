@@ -1,13 +1,8 @@
-//import com.vanniktech.maven.publish.JavaLibrary
-//import com.vanniktech.maven.publish.JavadocJar
-//import com.vanniktech.maven.publish.SonatypeHost
 import java.io.ByteArrayOutputStream
 
 plugins {
     java
-    `maven-publish`
-    //signing
-//    id("com.vanniktech.maven.publish") version "0.28.0"
+    alias(libs.plugins.maven.publish)
 }
 
 val groupVal = "io.github.selemba1000"
@@ -19,7 +14,6 @@ repositories {
 }
 
 java{
-    withJavadocJar()
     withSourcesJar()
 }
 
@@ -35,54 +29,6 @@ dependencies {
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
-
-//publishing {
-//    publications {
-//        create<MavenPublication>("maven") {
-//            groupId = "io.github.selemba1000"
-//            artifactId = "JavaMediaTransportControls"
-//            version = "0.0.3"
-//        }
-//    }
-//}
-
-//mavenPublishing{
-//    coordinates(groupVal,nameVal,versionVal)
-//
-//    configure(JavaLibrary(
-//        javadocJar = JavadocJar.Javadoc(),
-//        sourcesJar = true
-//    ))
-//
-//    pom {
-//        name.set("JavaMediaTransportControls")
-//        description.set("A simple Java library to interface with system media controls.")
-//        url.set("https://github.com/Selemba1000/JavaMediaTransportControls")
-//        licenses {
-//            license {
-//                name.set("MIT License")
-//                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-//                distribution.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-//            }
-//        }
-//        developers {
-//            developer {
-//                id.set("Selemba1000")
-//                name.set("Sebastian Lempik")
-//                email.set("sebastian.lempik@gmx.de")
-//                url.set("https://github.com/Selemba1000")
-//            }
-//        }
-//        scm {
-//            connection.set("scm:git:git://https://github.com/Selemba1000/JavaMediaTransportControls.git")
-//            developerConnection.set("scm:git:ssh://git@github.com:Selemba1000/JavaMediaTransportControls.git")
-//            url.set("https://github.com/Selemba1000/JavaMediaTransportControls")
-//        }
-//    }
-//
-//    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-//    signAllPublications()
-//}
 
 tasks.javadoc {
     if (JavaVersion.current().isJava9Compatible) {
@@ -170,11 +116,43 @@ abstract class NativeCompile : DefaultTask() {
         val source = inputs.files
         val command = "MSBuild.exe -m /property:Platform=${platform} /property:Configuration=${configuration}"
         val stream = ByteArrayOutputStream()
-        project.exec{
+        providers.exec {
             workingDir = source.single { it.extension == "vcxproj" }.parentFile
             commandLine(command.split(" "))
             standardOutput = stream
         }
     }
 
+}
+
+mavenPublishing {
+    println("Setting directory for publishing:")
+    publishToMavenCentral(automaticRelease = false)
+    signAllPublications()
+    coordinates("org.simpmusic", "jmtc", libs.versions.library.get())
+    pom {
+        name.set("JMTC")
+        description.set("JMTC forked version")
+        inceptionYear.set("2025")
+        url.set("https://github.com/maxrave-dev/NowPlayingCenter")
+        licenses {
+            license {
+                name.set("MIT License")
+                url.set("https://github.com/maxrave-dev/NowPlayingCenter/blob/master/LICENSE")
+                distribution.set("https://github.com/maxrave-dev/NowPlayingCenter/blob/master/LICENSE")
+            }
+        }
+        developers {
+            developer {
+                id.set("maxrave-dev")
+                name.set("Nguyen Duc Tuan Minh")
+                url.set("https://github.com/maxrave-dev/")
+            }
+        }
+        scm {
+            url.set("https://github.com/maxrave-dev/NowPlayingCenter")
+            connection.set("scm:git:git://github.com/maxrave-dev/NowPlayingCenter.git")
+            developerConnection.set("scm:git:ssh://git@github.com/maxrave-dev/NowPlayingCenter.git")
+        }
+    }
 }
